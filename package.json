@@ -1,0 +1,16 @@
+{
+  "name": "RNProject-tool-dependecies",
+  "version": "1.0.0",
+  "description": "React Native CLI and Typescript for RNProject",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ios": "cd RNProject && react-native run-ios",
+    "android": "cd BrightRN && react-native run-android"
+  },
+  "author": "Kurnia Jayaa Eliazar <kurniaeliazar@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "react-native-cli": "^2.0.1",
+    "typescript": "^2.1.5"
+  }
+}
