@@ -3,12 +3,27 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  Button,
+  Alert
 } from 'react-native';
 import NotificationModule from './components/native/NotificationModule';
-import AwesomeButton from 'react-native-awesome-button';
+import SecondEventModule from './components/native/SecondEventModule';
+import { DeviceEventEmitter } from 'react-native';
 
 class RNProject extends Component<any, any> {
+  componentWillMount() {
+     DeviceEventEmitter.addListener('showDialog', (e) => this._showDialog());
+  }
+
+  componentDidMount(){
+    this.getArray();
+    this.getObj();
+    this.getString();
+    this.getSendArray();
+    this.getSendObject();
+  }
+
   render() {
     return (
       <View style={styles.containerStyle}>
@@ -16,54 +31,23 @@ class RNProject extends Component<any, any> {
           Say Hello to React Native!
         </Text>
         <View style={styles.boxStyle}>
-          <AwesomeButton
-            states={{
-              default: {
-                backgroundStyle: {
-                  backgroundColor: '#d35400',
-                  minHeight: 40,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: 30
-                },
-                onPress: this._onPressButton,
-                text: "Local notification example",
-              }
-            }}
+
+          <Button
+            onPress={this._onPressButton}
+            title="Local notification example"
+            color="#841584"
           />
 
-          <AwesomeButton
-            states={{
-              default: {
-                backgroundStyle: {
-                  backgroundColor: '#8e44ad',
-                  minHeight: 40,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: 30,
-                  marginTop: 10
-                },
-                onPress: this._onScheduleNotifButton,
-                text: "Schedule a notification : 18:00",
-              }
-            }}
+          <Button
+            onPress={this._onScheduleNotifButton}
+            title="Schedule a notification : 18:00"
+            color="#841584"
           />
 
-           <AwesomeButton
-            states={{
-              default: {
-                backgroundStyle: {
-                  backgroundColor: '#16a085',
-                  minHeight: 40,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: 30,
-                  marginTop: 10
-                },
-                onPress: this._onCancelSchedulButton,
-                text: "Cancel a notification",
-              }
-            }}
+          <Button
+            onPress={this._onCancelSchedulButton}
+            title="Cancel a notification"
+            color="#841584"
           />
 
         </View>
@@ -72,7 +56,8 @@ class RNProject extends Component<any, any> {
   }
 
   _onPressButton() {
-    NotificationModule.showNotification('Test', 'Haloha');
+    //NotificationModule.showNotification('Test', 'Haloha');
+    SecondEventModule.showDialog();
   }
 
   _onScheduleNotifButton(){
@@ -82,7 +67,64 @@ class RNProject extends Component<any, any> {
   _onCancelSchedulButton(){
     NotificationModule.cancelNotification('ScheduleTest', 'ScheduleText');
   }
+
+  _showDialog(){
+      Alert.alert('Log Out', 'Are you sure you want to Log Out', [
+          { text: 'No', onPress: null, style: 'cancel' },
+          { text: 'Yes', onPress: null }
+      ], { cancelable: false });
+  }
+
+  async getString() {
+    try {
+      var value = await SecondEventModule.getStringSample();
+      console.log(value);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  async getObj() {
+      try {
+        var {ObjectKey, ObjectKey2} = await SecondEventModule.getObjectSample();
+        console.log(ObjectKey);
+        console.log(ObjectKey2);
+      } catch (e) {
+        console.error(e);
+      }
+  }
+
+  async getArray() {
+      try {
+        var value = await SecondEventModule.getArraySample();
+        console.log(value);
+      } catch (e) {
+        console.error(e);
+      }
+  }
+
+  async getSendArray() {
+      try {
+        var value = await SecondEventModule.sendArrayArguments(["test1","test2"]);
+        console.log(value);
+      } catch (e) {
+        console.error(e);
+      }
+  }
+
+    async getSendObject() {
+
+      var input = { ObjectKey3 : "testArgument"};
+      try {
+        var value = await SecondEventModule.sendObjectArguments(input);
+        console.log(value);
+      } catch (e) {
+        console.error(e);
+      }
+  }
+
 }
+
 
 export default RNProject;
 

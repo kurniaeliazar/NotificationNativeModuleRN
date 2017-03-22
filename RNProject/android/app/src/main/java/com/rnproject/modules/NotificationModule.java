@@ -10,9 +10,11 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.widget.Toast;
 
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.WritableMap;
 import com.rnproject.MainActivity;
 import com.rnproject.R;
 import com.rnproject.modules.notification.NotificationAlarmReceiver;
@@ -35,10 +37,12 @@ public class NotificationModule extends ReactContextBaseJavaModule {
     private static final String GROUP_MESSAGE = "brightr_notification";
     private static int NOTIFICATION_ID = 2512;
     private final AlarmManager alarmManager;
+    private ReactApplicationContext reactApplicationContext;
 
     public NotificationModule(ReactApplicationContext reactContext) {
         super(reactContext);
         alarmManager = (AlarmManager) reactContext.getSystemService(Context.ALARM_SERVICE);
+        this.reactApplicationContext = reactContext;
     }
 
     @Override
@@ -57,28 +61,31 @@ public class NotificationModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void showNotification(String title, String message) {
 
-        NotificationCompat.Builder builder = new NotificationCompat.
-                Builder(getReactApplicationContext());
+//        NotificationCompat.Builder builder = new NotificationCompat.
+//                Builder(getReactApplicationContext());
+//
+//        Intent resultIntent = new Intent(getReactApplicationContext(), MainActivity.class);
+//        TaskStackBuilder stackBuilder = TaskStackBuilder.create(getReactApplicationContext());
+//
+//        stackBuilder.addNextIntent(resultIntent);
+//        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,
+//                PendingIntent.FLAG_ONE_SHOT);
+//
+//        builder.setContentTitle(title.toUpperCase())
+//                .setContentText(message)
+//                .setSmallIcon(R.mipmap.ic_launcher)
+//                .setContentIntent(resultPendingIntent)
+//                .setAutoCancel(true)
+//                .setDefaults(Notification.DEFAULT_ALL)
+//                .setGroup(GROUP_MESSAGE)
+//                .setStyle(new NotificationCompat.BigTextStyle().bigText(message));
+//
+//        final NotificationManager mNotificationManager = (NotificationManager)
+//                getReactApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+//        mNotificationManager.notify(NOTIFICATION_ID, builder.build());
 
-        Intent resultIntent = new Intent(getReactApplicationContext(), MainActivity.class);
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(getReactApplicationContext());
-
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,
-                PendingIntent.FLAG_ONE_SHOT);
-
-        builder.setContentTitle(title.toUpperCase())
-                .setContentText(message)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentIntent(resultPendingIntent)
-                .setAutoCancel(true)
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setGroup(GROUP_MESSAGE)
-                .setStyle(new NotificationCompat.BigTextStyle().bigText(message));
-
-        final NotificationManager mNotificationManager = (NotificationManager)
-                getReactApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(NOTIFICATION_ID, builder.build());
+        WritableMap params = Arguments.createMap();
+        EventModule.sendEvent(reactApplicationContext, "showDialog", params);
     }
 
     @ReactMethod
