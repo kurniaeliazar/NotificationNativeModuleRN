@@ -99,13 +99,8 @@ public class NotificationModule extends ReactContextBaseJavaModule {
         PendingIntent notificationAlarmPendingIntent = PendingIntent.getBroadcast(
                 getReactApplicationContext(), NOTIFICATION_ID, receiverIntent, 0);
 
-        final long alarmTime = DateTime.now()
-                .withHourOfDay(18)
-                .withMinuteOfHour(0)
-                .getMillis();
-
-        alarmManager.setRepeating(RTC_WAKEUP, alarmTime, INTERVAL_DAY, notificationAlarmPendingIntent);
-
+        final long alarmTime = DateTime.now().getMillis();
+        alarmManager.set(RTC_WAKEUP, alarmTime, notificationAlarmPendingIntent);
     }
 
     @ReactMethod

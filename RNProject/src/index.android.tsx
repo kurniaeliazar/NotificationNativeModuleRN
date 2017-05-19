@@ -4,35 +4,64 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
-  Alert
+  Alert,
+  Button
 } from 'react-native';
+
 import NotificationModule from './components/native/NotificationModule';
 import SecondEventModule from './components/native/SecondEventModule';
+import TestModule from './components/native/TestingModule';
 import { DeviceEventEmitter } from 'react-native';
 
 class RNProject extends Component<any, any> {
   componentWillMount() {
-     DeviceEventEmitter.addListener('showDialog', (e) => this._showDialog());
+     DeviceEventEmitter.addListener('TestingModule', (data) => { console.log(data.content));
   }
 
   componentDidMount(){
-    this.getArray();
-    this.getObj();
-    this.getString();
-    this.getSendArray();
-    this.getSendObject();
+    // this.getArray();
+    // this.getObj();
+    // this.getString();
+    // this.getSendArray();
+    // this.getSendObject();
+    // this.fetchData();
   }
 
   render() {
     return (
       <View style={styles.containerStyle}>
+
         <Text style={styles.title}>
           Say Hello to React Native!
         </Text>
+
         <View style={styles.boxStyle}>
 
           <Button
+            onPress={this.sendingArguments}
+            title="Sending Arguments To JS 2"
+            color="#841584"
+          />
+
+          <Button
+            onPress={this.sendingPromises}
+            title="Sending Promises"
+            color="#841584"
+          />
+
+          <Button
+            onPress={this.sendingEvents}
+            title="Sending emit events"
+            color="#841584"
+          />
+
+          {/*<Button
+            onPress={this.sendingEvents}
+            title="Sending emit events"
+            color="#841584"
+          />*/}
+
+          {/*<Button
             onPress={this._onPressButton}
             title="Local notification example"
             color="#841584"
@@ -48,12 +77,41 @@ class RNProject extends Component<any, any> {
             onPress={this._onCancelSchedulButton}
             title="Cancel a notification"
             color="#841584"
-          />
+          />*/}
 
         </View>
       </View>
     );
   }
+
+ sendingArguments(){
+    let stringArg : String = "Hello world";
+    let booleanArg : Boolean = true;
+    let doubleArg : Number = 8.7654321;
+
+    let data = {
+        id : "data1",
+        content : "content"
+    };
+
+    let dataArray = ["Test1", "Test2", "Test3"];
+    TestModule.showArgumentsExample(stringArg, booleanArg, doubleArg, data, dataArray);
+ }
+
+ sendingPromises(){
+    TestModule.promiseExample(2)
+              .then((number) => console.log(number))
+              .catch((key,message) => console.log("error"));
+ }
+
+ sendingCallback(){
+
+ }
+
+ sendingEvents(){
+    TestModule.sendEvents();
+ }
+
 
   _onPressButton() {
     //NotificationModule.showNotification('Test', 'Haloha');
@@ -112,7 +170,7 @@ class RNProject extends Component<any, any> {
       }
   }
 
-    async getSendObject() {
+  async getSendObject() {
 
       var input = { ObjectKey3 : "testArgument"};
       try {
@@ -121,6 +179,12 @@ class RNProject extends Component<any, any> {
       } catch (e) {
         console.error(e);
       }
+  }
+
+  async fetchData() {
+    const response = await fetch('http://calapi.inadiutorium.cz/api/v0/en/calendars/default/today');
+    const json = await response.json()
+    console.log(json);
   }
 
 }
