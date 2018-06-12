@@ -1,4 +1,7 @@
-# React-native Example
+# React-native Native Module Example
 
-##Screenshot
+## Description
+Create react native notification modules example
+
+## Screenshot
 ![alt text](https://github.com/kurniaeliazar/RNProject/blob/master/RNProject/screen.png "Screenshoot")
